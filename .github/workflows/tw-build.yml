@@ -1,0 +1,39 @@
+name: Build and Deploy Workflow
+
+on:
+  push:
+    branches:
+      - main  # Trigger this workflow on pushes to the main branch
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest  # Run this workflow on an Ubuntu instance
+
+    steps:
+      # Step 1: Check out the repository
+      - name: Check out the repository
+        uses: actions/checkout@v3
+
+      # Step 2: Set up SSH for Git access
+      - name: Setup SSH for Git
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}  # SSH private key stored in GitHub secrets
+
+      # Step 3: Pull the latest code
+      - name: Pull latest changes
+        run: git pull --force
+
+      # Step 4: Navigate to tw-block and install dependencies
+      - name: Build tw-block plugin
+        run: |
+          cd wp-content/plugins/tw-block
+          npm ci  # Clean install dependencies
+          npm run build
+
+      # Step 5: Navigate to TechWishWebsite and install dependencies
+      - name: Build TechWishWebsite
+        run: |
+          cd ../../../TechWishWebsite
+          npm ci  # Clean install dependencies
+          npm run build
