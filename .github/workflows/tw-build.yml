@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-and-deploy:
-    runs-on: ubuntu-latest  # Run this workflow on an Ubuntu instance
+    runs-on: self-hosted
 
     steps:
       # Step 1: Check out the repository
