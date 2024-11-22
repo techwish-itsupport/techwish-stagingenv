@@ -38,7 +38,7 @@ jobs:
           npm ci  # Clean install dependencies
           if [ ! -f .env ]; then
           echo 'WP_URL="http://tw.local"' > .env
-             elif ! grep -qxF 'WP_URL="http://tw.local"' .env; then
+             elif ! grep -qxF 'WP_URL="https://stagingenv.techwish.com"' .env; then
                     echo 'WP_URL="http://tw.local"' >> .env
                       fi
           npm run build
