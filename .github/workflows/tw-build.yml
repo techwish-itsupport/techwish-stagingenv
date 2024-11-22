@@ -36,5 +36,9 @@ jobs:
         run: |
           cd TechWishWebsite
           npm ci  # Clean install dependencies
-          grep -qxF 'WP_URL="https://stagingenv.techwish.com/"' .env || echo 'WP_URL="http://tw.local"' >> .env
+          if [ ! -f .env ]; then
+          echo 'WP_URL="http://tw.local"' > .env
+             elif ! grep -qxF 'WP_URL="http://tw.local"' .env; then
+                    echo 'WP_URL="http://tw.local"' >> .env
+                      fi
           npm run build
