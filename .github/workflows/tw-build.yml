@@ -34,6 +34,6 @@ jobs:
       # Step 5: Navigate to TechWishWebsite and install dependencies
       - name: Build TechWishWebsite
         run: |
-          cd ../../../TechWishWebsite
+          cd TechWishWebsite
           npm ci  # Clean install dependencies
           npm run build
