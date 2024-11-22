@@ -36,9 +36,28 @@ jobs:
         run: |
           cd TechWishWebsite
           npm ci  # Clean install dependencies
-          if [ ! -f .env ]; then
-          echo 'WP_URL="http://tw.local"' > .env
-             elif ! grep -qxF 'WP_URL="https://stagingenv.techwish.com"' .env; then
-                    echo 'WP_URL="http://tw.local"' >> .env
-                      fi
+           echo "Current directory: $(pwd)"
+          echo "Listing all files in the directory, including hidden ones:"
+          ls -lha  # Include hidden files and detailed view
+
+          # Check and update .env file contents
+          if [ -f .env ]; then
+            echo ".env file exists. Checking its content..."
+            if grep -q 'WP_URL="http://tw.local"' .env; then
+              echo "Replacing local URL with staging URL in .env file."
+              sed -i 's|WP_URL="http://tw.local"|WP_URL="https://stagingenv.techwish.com"|g' .env
+            elif ! grep -q 'WP_URL="https://stagingenv.techwish.com"' .env; then
+              echo "Adding staging URL to .env file."
+              echo 'WP_URL="https://stagingenv.techwish.com"' >> .env
+            else
+              echo ".env file already contains the correct staging URL."
+            fi
+          else
+            echo ".env file does not exist. Creating a new one with the staging URL."
+            echo 'WP_URL="https://stagingenv.techwish.com"' > .env
+          fi
+
+          # Debugging: Display .env contents
+          echo "Contents of .env file after update:"
+          cat .env          
           npm run build
